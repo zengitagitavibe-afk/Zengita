@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zengita - Prati Slokam... Oka Jeevana Patam</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Mandali&family=Noto+Sans+Telugu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --saffron: #FF9933;
+            --maroon: #800507;
+            --cream: #FFF9E3;
+        }
+        body {
+            background-color: var(--cream);
+            font-family: 'Noto Sans Telugu', 'Mandali', sans-serif;
+            color: var(--maroon);
+        }
+        .temple-container {
+            border: 6px solid var(--saffron);
+            box-shadow: 0 10px 30px rgba(128, 5, 7, 0.2);
+            background: white;
+            border-radius: 2rem;
+        }
+        .sacred-btn {
+            background-color: var(--saffron);
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+        .sacred-btn:hover {
+            background-color: var(--maroon);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 md:p-8">
+
+    <header class="text-center mb-10">
+        <h1 class="text-6xl font-extrabold mb-2" style="color: var(--maroon);">Zengita</h1>
+        <p class="text-2xl italic font-semibold" style="color: var(--saffron);">ప్రతి శ్లోకం... ఒక జీవన పాఠం</p>
+        <p class="text-xs uppercase tracking-[0.3em] mt-3 opacity-80">జ్ఞానం కాదు - జీవించే విధానం</p>
+    </header>
+
+    <main class="w-full max-w-3xl temple-container p-6 md:p-10 relative overflow-hidden">
+        
+        <div class="flex justify-between items-center mb-8">
+            <label for="langSelect" class="text-sm font-bold uppercase">Select Language:</label>
+            <select id="langSelect" class="border-2 border-orange-200 rounded-lg p-2 bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                <option value="te">Telugu (Original)</option>
+                <option value="hi">Hindi (Devanagari)</option>
+                <option value="en">English (IAST)</option>
+                <option value="ta">Tamil</option>
+            </select>
+        </div>
+
+        <div id="displayArea" class="text-center">
+            <h2 id="slokaTitle" class="text-xl font-bold mb-6 text-orange-600 uppercase tracking-widest">Loading...</h2>
+            
+            <div id="slokaContent" class="text-3xl md:text-4xl leading-relaxed mb-10 font-medium min-h-[150px]">
+                Please add a sloka in your Supabase database to see it here.
+            </div>
+
+            <div id="slokaMeaning" class="text-lg italic text-gray-700 mb-10 border-t pt-6 border-orange-100">
+                </div>
+
+            <div class="flex flex-col items-center space-y-6">
+                <audio id="slokaAudio" controls class="w-full max-w-md"></audio>
+                
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="alert('Practice Mode coming soon!')" class="sacred-btn">Practice Mode</button>
+                    <button onclick="alert('Quiz Mode coming soon!')" class="sacred-btn">Quiz Mode</button>
+                    <button onclick="alert('Exam Mode coming soon!')" class="sacred-btn">Exam Mode</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-auto py-8 text-center text-sm opacity-60">
+        <p>© 2025 Zengita | Accessible Spiritual Learning</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // --- STEP: PASTE YOUR KEYS BELOW --
+        const supabaseUrl = 'https://ghiwspqrzeofigacsytr.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
+        // ------------------------------------
+
+        const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
+        let masterTeluguText = "";
+
+        async function fetchInitialSloka() {
+            const { data, error } = await supabase
+                .from('slokas')
+                .select('*')
+                .order('order_index', { ascending: true })
+                .limit(1);
+
+            if (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('slokaContent').innerText = "Error connecting to Database.";
+            } else if (data && data.length > 0) {
+                const sloka = data[0];
+                masterTeluguText = sloka.telugu_text;
+                document.getElementById('slokaTitle').innerText = sloka.title;
+                document.getElementById('slokaContent').innerText = masterTeluguText;
+                document.getElementById('slokaMeaning').innerText = sloka.meaning_english || "";
+                if(sloka.audio_url) document.getElementById('slokaAudio').src = sloka.audio_url;
+            }
+        }
+
+        // Language Transposition Logic using Aksharamukha API
+        async function transposeLanguage() {
+            const target = document.getElementById('langSelect').value;
+            const contentDiv = document.getElementById('slokaContent');
+
+            if (target === 'te') {
+                contentDiv.innerText = masterTeluguText;
+                return;
+            }
+
+            contentDiv.innerText = "Transcribing sacred text...";
+
+            const langMap = { 'hi': 'Devanagari', 'en': 'IAST', 'ta': 'Tamil
