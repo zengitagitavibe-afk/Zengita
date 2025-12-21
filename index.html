@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zengita | Sacred UI</title>
+    <title>Zengita | Sacred Learning Flow</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -12,58 +12,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Playfair+Display:ital,wght@0,900;1,700&display=swap" rel="stylesheet">
 
     <style>
-        :root { --maroon: #5D0E11; --gold: #D4AF37; --saffron: #FF9933; --cream: #FDF5E6; }
+        :root { --maroon: #5D0E11; --gold: #D4AF37; --cream: #FDF5E6; }
         
         body { 
             background-color: var(--maroon); 
-            background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+            /* Matching the textured background from Figma */
+            background-image: radial-gradient(circle at center, #7A1216 0%, #3D080A 100%);
             font-family: 'Noto Sans Telugu', sans-serif;
             margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
 
-        /* FIGMA MATCH: The Sacred Archway */
-        .sacred-arch {
+        /* FIGMA MATCH: The High-Fidelity Temple Arch */
+        .sacred-frame {
             background: var(--cream);
-            color: var(--maroon);
-            width: 100%; max-width: 400px;
-            min-height: 620px;
-            border: 4px solid var(--gold);
-            border-radius: 160px 160px 40px 40px;
+            width: 100%; max-width: 380px;
+            min-height: 640px;
+            /* Precise Arch Geometry */
+            border-radius: 180px 180px 40px 40px;
+            border: 6px solid var(--gold);
             position: relative;
-            padding: 90px 30px 40px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-            overflow: hidden;
+            padding: 100px 24px 40px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
-        /* Inner decorative gold line */
-        .sacred-arch::after {
+        /* The Inner Decorative "Double Line" */
+        .sacred-frame::before {
             content: ""; position: absolute;
-            top: 10px; left: 10px; right: 10px; bottom: 10px;
-            border: 1.5px solid var(--gold);
-            border-radius: 150px 150px 32px 32px;
-            pointer-events: none; opacity: 0.5;
+            top: 12px; left: 12px; right: 12px; bottom: 12px;
+            border: 2px solid var(--gold);
+            border-radius: 170px 170px 32px 32px;
+            pointer-events: none; opacity: 0.4;
         }
 
-        /* FIGMA MATCH: Beveled Cream Buttons */
+        /* FIGMA MATCH: Beveled Golden Buttons */
         .btn-sacred {
             background: linear-gradient(180deg, #FFFFFF 0%, #E8DCC4 100%);
-            border: 2.5px solid var(--gold);
+            border: 2px solid var(--gold);
             color: var(--maroon);
-            border-radius: 50px;
-            font-weight: 900;
-            padding: 16px;
-            box-shadow: 0 5px 0 var(--gold);
-            transition: 0.1s;
+            border-radius: 60px;
+            font-weight: 800;
+            padding: 18px;
+            box-shadow: 0 6px 0 #B8952E; /* Darker gold for depth */
+            transition: all 0.1s ease;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
             width: 100%;
         }
-        .btn-sacred:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--gold); }
+        .btn-sacred:active { transform: translateY(4px); box-shadow: 0 2px 0 #B8952E; }
 
-        .input-sacred {
+        /* Admin Input Styling */
+        .admin-field {
             width: 100%; background: white; border: 2px solid var(--gold);
-            border-radius: 15px; padding: 12px; margin-bottom: 12px; color: var(--maroon); outline: none;
+            border-radius: 20px; padding: 14px; margin-bottom: 16px; 
+            color: var(--maroon); font-weight: bold; outline: none;
         }
     </style>
 </head>
@@ -74,70 +76,71 @@
         const { useState } = React;
 
         function ZengitaApp() {
-            const [view, setView] = useState('dashboard');
-            const [slokaData, setSlokaData] = useState({
+            const [page, setPage] = useState('home');
+            const [content, setContent] = useState({
                 title: "GITA 1.1",
                 telugu: "ధర్మక్షేత్రే కురుక్షేత్రే సమవేతా యుయుత్సవః | మామకాః పాణ్డవాశ్చైవ కిమకుర్వత సంజయ ||",
                 english: "Dhritarashtra said: O Sanjaya, assembled in the holy field of Kurukshetra..."
             });
 
             const handleSave = () => {
-                const t = document.getElementById('inTitle').value;
-                const tel = document.getElementById('inTelugu').value;
-                const eng = document.getElementById('inEnglish').value;
-                if(t && tel) {
-                    setSlokaData({ title: t, telugu: tel, english: eng });
-                    alert("Folder structure updated with new Sloka!");
-                    setView('discovery');
+                const t = document.getElementById('newT').value;
+                const te = document.getElementById('newTe').value;
+                const en = document.getElementById('newEn').value;
+                if(t && te) {
+                    setContent({ title: t, telugu: te, english: en });
+                    setPage('sloka');
                 }
             };
 
             return (
-                <div className="sacred-arch">
-                    {/* Header Logo */}
-                    <div className="absolute top-12 left-0 right-0 text-center">
-                        <h1 style={{fontFamily: 'Playfair Display'}} className="text-3xl italic font-black text-maroon">Zengita</h1>
+                <div className="sacred-frame">
+                    {/* Brand Logo */}
+                    <div className="absolute top-14 left-0 right-0 text-center">
+                        <h1 style={{fontFamily: 'Playfair Display'}} className="text-4xl italic font-black text-[#5D0E11]">Zengita</h1>
                     </div>
 
                     {/* Dashboard Screen */}
-                    {view === 'dashboard' && (
-                        <div className="mt-12 space-y-6">
-                            <h2 className="text-gold font-black tracking-widest text-[10px] text-center uppercase">Student Dashboard</h2>
-                            <div className="space-y-4">
-                                <button onClick={() => setView('discovery')} className="btn-sacred">📖 Daily Sloka</button>
-                                <button onClick={() => setView('admin')} className="btn-sacred">⚙️ Admin Control</button>
+                    {page === 'home' && (
+                        <div className="mt-16 flex flex-col items-center">
+                            <h2 className="text-[#D4AF37] font-black text-[10px] tracking-[0.3em] mb-12 uppercase">Student Dashboard</h2>
+                            <div className="w-full space-y-5 px-4">
+                                <button onClick={() => setPage('sloka')} className="btn-sacred">📖 Daily Sloka</button>
+                                <button onClick={() => setPage('admin')} className="btn-sacred">⚙️ Admin Mode</button>
                             </div>
-                            <div className="bg-white/50 border border-gold/30 rounded-3xl p-6 flex justify-between items-center mt-10">
+                            <div className="mt-16 bg-white border-2 border-[#D4AF37]/30 rounded-[30px] p-6 w-full flex justify-between items-center">
                                 <div className="text-left">
-                                    <p className="text-[9px] font-black text-gold uppercase tracking-widest">Growth</p>
-                                    <p className="font-bold text-lg">4 Day Streak</p>
+                                    <p className="text-[10px] font-black text-[#D4AF37] uppercase">Streak</p>
+                                    <p className="font-bold text-xl text-[#5D0E11]">4 Day Consistency</p>
                                 </div>
-                                <span className="text-3xl">🔥</span>
+                                <span className="text-4xl">🔥</span>
                             </div>
                         </div>
                     )}
 
-                    {/* Admin Screen */}
-                    {view === 'admin' && (
-                        <div className="mt-10">
-                            <button onClick={() => setView('dashboard')} className="text-[10px] font-black mb-6">← BACK</button>
-                            <h2 className="text-xl font-black mb-6 text-center">Add Sacred Content</h2>
-                            <input id="inTitle" placeholder="Chapter (e.g. 1.1)" className="input-sacred" />
-                            <textarea id="inTelugu" rows="3" placeholder="Telugu Script..." className="input-sacred"></textarea>
-                            <textarea id="inEnglish" rows="3" placeholder="English Meaning..." className="input-sacred"></textarea>
-                            <button onClick={handleSave} className="btn-sacred !bg-[#5D0E11] !text-white !border-gold">Save to Folders</button>
+                    {/* Admin Form Screen */}
+                    {page === 'admin' && (
+                        <div className="mt-10 flex flex-col items-center">
+                            <button onClick={() => setPage('home')} className="text-[10px] font-black mb-8">← BACK</button>
+                            <h2 className="text-2xl font-black text-[#5D0E11] mb-8">Add Sacred Content</h2>
+                            <div className="w-full">
+                                <input id="newT" placeholder="Chapter (e.g. 1.1)" className="admin-field" />
+                                <textarea id="newTe" rows="3" placeholder="Telugu Script..." className="admin-field"></textarea>
+                                <textarea id="newEn" rows="3" placeholder="English Meaning..." className="admin-field"></textarea>
+                                <button onClick={handleSave} className="btn-sacred !bg-[#5D0E11] !text-white !border-white mt-4">Save to Folders</button>
+                            </div>
                         </div>
                     )}
 
-                    {/* Discovery Screen */}
-                    {view === 'discovery' && (
-                        <div className="mt-6 text-center">
-                            <p className="text-gold font-black tracking-widest text-[10px] mb-8 uppercase">{slokaData.title}</p>
-                            <h3 className="text-xl font-bold leading-relaxed mb-8 px-2 text-gray-900">{slokaData.telugu}</h3>
-                            <div className="w-12 h-0.5 bg-gold/20 mx-auto mb-8"></div>
-                            <p className="italic text-gray-600 text-sm leading-relaxed mb-10 px-4">{slokaData.english}</p>
-                            <button className="btn-sacred !bg-[#5D0E11] !text-white mb-4">Practice Mode</button>
-                            <button onClick={() => setView('dashboard')} className="text-[9px] font-black text-gold uppercase tracking-[0.2em]">Return to Menu</button>
+                    {/* Sloka View Screen */}
+                    {page === 'sloka' && (
+                        <div className="mt-6 text-center flex flex-col items-center">
+                            <p className="text-[#D4AF37] font-black text-[10px] tracking-[0.4em] mb-10 uppercase">{content.title}</p>
+                            <h3 className="text-2xl font-bold leading-loose text-gray-900 mb-8 px-2">{content.telugu}</h3>
+                            <div className="w-16 h-0.5 bg-[#D4AF37]/30 mb-8"></div>
+                            <p className="italic text-gray-600 text-sm leading-relaxed mb-12 px-4">{content.english}</p>
+                            <button className="btn-sacred !bg-[#5D0E11] !text-white mb-6">🎙️ Practice Mode</button>
+                            <button onClick={() => setPage('home')} className="text-[10px] font-black text-[#D4AF37] tracking-widest uppercase">Exit</button>
                         </div>
                     )}
                 </div>
