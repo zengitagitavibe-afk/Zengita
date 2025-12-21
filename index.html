@@ -5,161 +5,146 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zengita | Sacred Learning Flow</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
     <style>
-        :root { --saffron: #FF9933; --maroon: #800507; --cream: #FFFBF2; }
-        body { background-color: var(--cream); font-family: 'Noto Sans Telugu', sans-serif; transition: all 0.3s ease; }
+        :root { --maroon: #800507; --saffron: #FF9933; --cream: #FFFBF2; }
+        body { background-color: var(--cream); font-family: 'Noto Sans Telugu', sans-serif; }
         
-        /* Temple Arch Header */
+        /* EXACT UI MATCH: Temple Arch Header */
         .temple-arch {
             background: var(--maroon);
-            border-radius: 0 0 100px 100px;
-            padding-bottom: 5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 0 0 80px 80px;
+            padding: 4rem 1rem 6rem;
+            position: relative;
         }
 
-        /* Glass Cards */
-        .nav-card {
+        /* Nav Cards */
+        .z-card {
             background: white;
-            border-radius: 1.5rem;
-            border: 1px solid rgba(255, 153, 51, 0.15);
-            box-shadow: 0 8px 20px rgba(128, 5, 7, 0.04);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 2rem;
+            box-shadow: 0 12px 24px rgba(128, 5, 7, 0.08);
+            border: 1px solid rgba(255, 153, 51, 0.1);
+            transition: all 0.3s ease;
         }
-        .nav-card:hover { transform: translateY(-5px); border-color: var(--saffron); }
+        .z-card:hover { transform: translateY(-5px); border-color: var(--saffron); }
 
-        /* Navigation Logic */
-        .page { display: none; min-height: 100vh; animation: pageIn 0.4s ease-out; }
-        .page.active { display: flex; flex-direction: column; }
-        @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .btn-saffron {
-            background: linear-gradient(135deg, #FF9933, #FFB366);
-            color: white;
-            box-shadow: 0 10px 20px rgba(255, 153, 51, 0.3);
+        /* Form Inputs for Admin UI */
+        .z-input {
+            width: 100%; border: 2px solid #EEE; border-radius: 1rem; padding: 1rem; margin-top: 0.5rem;
         }
-
-        /* Animated Waveform */
-        .wave-bar { animation: wave 1s infinite ease-in-out; }
-        @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 40px; } }
+        .z-input:focus { border-color: var(--saffron); outline: none; }
     </style>
 </head>
 <body>
 
     <div id="home" class="page active">
-        <div class="temple-arch text-center pt-16 px-6">
-            <h1 style="font-family: 'Playfair Display';" class="text-white text-6xl font-black italic">Zengita</h1>
-            <p class="text-orange-300 font-bold mt-3 text-lg">ప్రతి శ్లోకం... ఒక జీవన పాఠం</p>
+        <div class="temple-arch text-center">
+            <h1 style="font-family: 'Playfair Display';" class="text-white text-5xl font-black italic">Zengita</h1>
+            <p class="text-orange-300 font-bold mt-2">ప్రతి శ్లోకం... ఒక జీవన పాఠం</p>
         </div>
 
-        <div class="px-6 -mt-12 w-full max-w-md mx-auto">
+        <div class="px-6 -mt-12 max-w-md mx-auto space-y-4">
             <div class="grid grid-cols-2 gap-4">
-                <div onclick="showPage('discovery')" class="nav-card p-6 text-center cursor-pointer">
-                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">📖</div>
-                    <p class="font-bold text-maroon text-sm uppercase tracking-tight">Daily Sloka</p>
+                <div onclick="showPage('slokaView')" class="z-card p-6 text-center cursor-pointer">
+                    <span class="text-3xl block mb-2">📖</span>
+                    <p class="font-bold text-maroon text-xs uppercase tracking-widest">Daily Sloka</p>
                 </div>
-                <div onclick="showPage('languages')" class="nav-card p-6 text-center cursor-pointer">
-                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">🌐</div>
-                    <p class="font-bold text-maroon text-sm uppercase tracking-tight">Languages</p>
-                </div>
-                <div class="nav-card p-6 text-center opacity-40 grayscale">
-                    <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">📊</div>
-                    <p class="font-bold text-gray-600 text-sm uppercase tracking-tight">Progress</p>
-                </div>
-                <div class="nav-card p-6 text-center opacity-40 grayscale">
-                    <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">⚙️</div>
-                    <p class="font-bold text-gray-600 text-sm uppercase tracking-tight">Settings</p>
+                <div onclick="showPage('admin')" class="z-card p-6 text-center cursor-pointer">
+                    <span class="text-3xl block mb-2">⚙️</span>
+                    <p class="font-bold text-maroon text-xs uppercase tracking-widest">Admin Add</p>
                 </div>
             </div>
             
-            <div class="nav-card mt-6 p-6 flex items-center justify-between">
+            <div class="z-card p-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-xl">🔥</div>
+                    <div>
+                        <p class="font-bold text-maroon">Daily Streak</p>
+                        <p class="text-xs text-gray-500">4 Days consistent!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin" class="page px-6 py-10">
+        <div class="max-w-md mx-auto">
+            <button onclick="showPage('home')" class="text-maroon font-black mb-6">← BACK TO HOME</button>
+            <h2 class="text-3xl font-bold text-maroon mb-2">Add New Sloka</h2>
+            <p class="text-gray-500 mb-8">Organize your sacred content.</p>
+
+            <div class="z-card p-8 space-y-6">
                 <div>
-                    <h4 class="font-bold text-maroon text-lg">Daily Streak</h4>
-                    <p class="text-gray-500 text-sm">4 days consistent</p>
+                    <label class="text-xs font-bold uppercase text-gray-400">Chapter & Verse</label>
+                    <input id="newTitle" type="text" placeholder="e.g. Gita 1.1" class="z-input">
                 </div>
-                <div class="text-3xl">🔥</div>
+                <div>
+                    <label class="text-xs font-bold uppercase text-gray-400">Telugu Text</label>
+                    <textarea id="newTelugu" rows="3" placeholder="Enter Sloka..." class="z-input"></textarea>
+                </div>
+                <div>
+                    <label class="text-xs font-bold uppercase text-gray-400">English Meaning</label>
+                    <textarea id="newEnglish" rows="3" placeholder="Enter Meaning..." class="z-input"></textarea>
+                </div>
+                <button onclick="saveSloka()" class="w-full bg-[#800507] text-white py-4 rounded-2xl font-bold text-lg shadow-xl">
+                    Save to Folders
+                </button>
             </div>
         </div>
     </div>
 
-    <div id="languages" class="page items-center pt-12 px-6">
-        <div class="w-full max-w-md">
-            <button onclick="showPage('home')" class="text-maroon font-black text-xl mb-8 flex items-center gap-2">
-                <span>←</span> Dashboard
-            </button>
-            <h2 class="text-3xl font-extrabold text-maroon mb-2">Preferred Script</h2>
-            <p class="text-gray-500 mb-8 font-medium">Select the language for sloka recitation.</p>
-            
-            <div class="space-y-4">
-                <div class="nav-card p-6 flex items-center justify-between border-2 border-orange-500">
-                    <span class="font-bold text-lg">Telugu (తెలుగు)</span>
-                    <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs">✓</div>
-                </div>
-                <div class="nav-card p-6 flex items-center justify-between opacity-70">
-                    <span class="font-bold text-lg">Sanskrit (సంస్కృతం)</span>
-                </div>
-                <div class="nav-card p-6 flex items-center justify-between opacity-70">
-                    <span class="font-bold text-lg">English (Meaning Only)</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="slokaView" class="page px-6 py-12">
+        <div class="max-w-lg mx-auto">
+            <nav class="flex justify-between items-center mb-10">
+                <button onclick="showPage('home')" class="text-maroon font-bold">← Dashboard</button>
+                <span class="text-xs font-black text-orange-500 tracking-widest">SACRED SCRIPT</span>
+            </nav>
 
-    <div id="discovery" class="page items-center pt-12 px-6">
-        <div class="w-full max-w-lg">
-            <button onclick="showPage('home')" class="text-maroon font-black text-xl mb-6">← Home</button>
-            
-            <div class="bg-white rounded-[3.5rem] p-12 text-center shadow-2xl relative border border-orange-50/50">
-                <span class="text-orange-500 font-black tracking-[0.4em] text-xs uppercase mb-8 block">GITA 1.1</span>
-                
-                <h3 class="text-3xl md:text-4xl font-bold leading-relaxed mb-10 text-gray-900">
+            <div class="bg-white rounded-[3.5rem] p-12 text-center shadow-2xl relative border border-orange-100">
+                <span id="displayTitle" class="text-orange-500 font-black text-xs uppercase tracking-widest">GITA 1.1</span>
+                <h3 id="displayTelugu" class="text-3xl md:text-4xl font-bold leading-relaxed mt-8 mb-10 text-gray-900">
                     ధర్మక్షేత్రే కురుక్షేత్రే సమవేతా యుయుత్సవః |<br>
                     మామకాః పాణ్డవాశ్చైవ కిమకుర్వత సంజయ ||
                 </h3>
-
                 <div class="w-16 h-1 bg-orange-100 mx-auto mb-10 rounded-full"></div>
-
-                <p class="italic text-gray-600 text-lg leading-relaxed mb-12">
-                    "Dhritarashtra said: O Sanjaya, assembled in the holy field of Kurukshetra and eager to fight, what did my sons and the sons of Pandu do?"
+                <p id="displayEnglish" class="italic text-gray-600 text-lg leading-relaxed mb-12">
+                    "Dhritarashtra said: O Sanjaya, assembled in the holy field of Kurukshetra..."
                 </p>
-
-                <div class="space-y-4">
-                    <button onclick="togglePractice(true)" class="w-full btn-saffron py-5 rounded-[2rem] font-bold text-xl flex items-center justify-center gap-3">
-                        <span>🎙️</span> Practice Chanting
-                    </button>
-                    <p class="text-maroon font-bold text-sm cursor-pointer hover:underline py-2">Skip to Next Sloka →</p>
-                </div>
+                <button class="w-full bg-gradient-to-r from-orange-400 to-orange-500 text-white py-5 rounded-[2rem] font-bold text-xl shadow-lg">
+                    🎙️ Practice Mode
+                </button>
             </div>
-        </div>
-    </div>
-
-    <div id="practiceModal" class="fixed inset-0 bg-black/50 backdrop-blur-md hidden items-center justify-center p-6 z-50">
-        <div class="bg-white rounded-[3rem] w-full max-w-sm p-14 text-center shadow-2xl">
-            <h3 class="text-2xl font-bold text-maroon mb-2">Recite Now</h3>
-            <p class="text-gray-400 mb-10">Listen to your inner voice...</p>
-            
-            <div class="flex items-center justify-center gap-2 h-16 mb-12">
-                <div class="w-2 bg-orange-200 rounded-full wave-bar" style="animation-delay: 0.1s"></div>
-                <div class="w-2 bg-orange-400 rounded-full wave-bar" style="animation-delay: 0.2s"></div>
-                <div class="w-2 bg-maroon rounded-full wave-bar" style="animation-delay: 0.3s"></div>
-                <div class="w-2 bg-orange-400 rounded-full wave-bar" style="animation-delay: 0.4s"></div>
-                <div class="w-2 bg-orange-200 rounded-full wave-bar" style="animation-delay: 0.5s"></div>
-            </div>
-
-            <button onclick="togglePractice(false)" class="w-full bg-maroon text-white py-5 rounded-2xl font-bold text-lg">Finish Practice</button>
         </div>
     </div>
 
     <script>
+        // Folder/Page Logic
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        function togglePractice(show) {
-            const modal = document.getElementById('practiceModal');
-            modal.style.display = show ? 'flex' : 'none';
+        // Admin Action: Add Sloka
+        function saveSloka() {
+            const title = document.getElementById('newTitle').value;
+            const telugu = document.getElementById('newTelugu').value;
+            const english = document.getElementById('newEnglish').value;
+
+            if(title && telugu) {
+                document.getElementById('displayTitle').innerText = title;
+                document.getElementById('displayTelugu').innerText = telugu;
+                document.getElementById('displayEnglish').innerText = english;
+                
+                alert("Sloka saved successfully to the Student View!");
+                showPage('slokaView');
+            } else {
+                alert("Please fill in the Sloka details.");
+            }
         }
     </script>
 </body>
