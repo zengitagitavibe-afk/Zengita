@@ -39,28 +39,35 @@
     </main>
 
     <script>
-        // CORRECTED PROJECT URL - Added the 'r' at the end
-        const supabaseUrl = 'https://ghiwspqrzeofigacysytr.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
-        
-        const _supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const supabaseUrl = 'https://ghiwspqrzeofigacysytr.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
+    
+    const _supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        async function fetchSloka() {
-            try {
-                const { data, error } = await _supabase.from('slokas').select('*').limit(1);
-                if (error) throw error;
+    async function fetchSloka() {
+        try {
+            // Trying to find your table. Change 'slokas' below if your table 
+            // has a different name (like 'verses' or 'Gita')
+            const { data, error } = await _supabase
+                .from('slokas') 
+                .select('*')
+                .limit(1);
 
-                if (data && data[0]) {
-                    document.getElementById('slokaText').innerText = data[0].sloka_telugu;
-                    document.getElementById('slokaEnglish').innerText = data[0].meaning_english;
-                    document.getElementById('loadingOverlay').classList.add('hidden');
-                }
-            } catch (err) {
-                console.error('Error:', err);
-                document.getElementById('statusText').innerText = "Table not found. Please check your Supabase table name.";
+            if (error) throw error;
+
+            if (data && data[0]) {
+                document.getElementById('slokaText').innerText = data[0].sloka_telugu;
+                document.getElementById('slokaEnglish').innerText = data[0].meaning_english;
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            } else {
+                document.getElementById('statusText').innerText = "Table found, but it is empty! Please add a row in Supabase.";
             }
+        } catch (err) {
+            console.error('Error:', err);
+            document.getElementById('statusText').innerText = "Table 'slokas' not found. Please rename your table in Supabase to 'slokas'.";
         }
-        fetchSloka();
-    </script>
+    }
+    fetchSloka();
+</script>
 </body>
 </html>
