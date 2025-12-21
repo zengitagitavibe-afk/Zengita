@@ -67,44 +67,48 @@
         <p class="text-gray-500 text-xs tracking-widest font-bold uppercase">Learning the Eternal Way</p>
     </footer>
 
-    <script>
-        // Your Specific Project Credentials
-        const supabaseUrl = 'https://ghiwspqrzeofigacysytr.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
-        
-        // Initialize Supabase Client
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+   <script>
+    // 1. Your Project Credentials
+    const supabaseUrl = 'https://ghiwspqrzeofigacysytr.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
+    
+    // 2. Initialize the client using 'supabasejs'
+    const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
 
-        async function fetchSloka() {
-            try {
-                // Fetch the first sloka from your 'slokas' table
-                const { data, error } = await supabase
-                    .from('slokas')
-                    .select('*')
-                    .limit(1);
+    async function fetchSloka() {
+        try {
+            console.log("Attempting to fetch sloka...");
+            // 3. Fetch from your 'slokas' table
+            const { data, error } = await supabase
+                .from('slokas')
+                .select('*')
+                .limit(1);
 
-                if (error) throw error;
+            if (error) throw error;
 
-                if (data && data[0]) {
-                    // Update the UI with Database Content
-                    document.getElementById('slokaText').innerText = data[0].sloka_telugu;
-                    document.getElementById('slokaEnglish').innerText = data[0].meaning_english;
-                    
-                    // Hide the loading overlay
-                    document.getElementById('loadingOverlay').classList.add('hidden');
-                }
-            } catch (err) {
-                console.error('Connection Error:', err);
-                document.getElementById('slokaText').innerText = "Unable to connect to the database. Check API keys.";
+            if (data && data.length > 0) {
+                console.log("Data received:", data[0]);
+                // 4. Update the UI
+                document.getElementById('slokaText').innerText = data[0].sloka_telugu;
+                document.getElementById('slokaEnglish').innerText = data[0].meaning_english;
+                
+                // 5. Hide the loading screen
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            } else {
+                document.getElementById('slokaText').innerText = "No slokas found in database.";
             }
+        } catch (err) {
+            console.error('Connection Error:', err);
+            document.getElementById('slokaText').innerText = "Connection failed. Please refresh.";
         }
+    }
 
-        // Modal Controls
-        function openPractice() { document.getElementById('practiceModal').classList.remove('hidden'); }
-        function closePractice() { document.getElementById('practiceModal').classList.add('hidden'); }
+    // Modal Controls for Practice Mode
+    function openPractice() { document.getElementById('practiceModal').classList.remove('hidden'); }
+    function closePractice() { document.getElementById('practiceModal').classList.add('hidden'); }
 
-        // Initial Load
-        fetchSloka();
-    </script>
+    // Start the process
+    fetchSloka();
+</script>
 </body>
 </html>
