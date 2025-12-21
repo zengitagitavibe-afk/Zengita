@@ -67,40 +67,46 @@
         <p class="text-gray-400 text-sm tracking-widest uppercase font-bold">LEARNING THE ETERNAL WAY</p>
     </footer>
 
-    <script>
-        const supabaseUrl = 'https://ghiwspqrzeofigacysytr.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
-        
-        // IMPORTANT: Use 'supabase.createClient' directly
-        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+   <script>
+    // 1. Setup credentials
+    const supabaseUrl = 'https://ghiwspqrzeofigacysytr.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
+    
+    // 2. Direct initialization
+    const { createClient } = window.supabase;
+    const _supabase = createClient(supabaseUrl, supabaseKey);
 
-        async function fetchSloka() {
-            try {
-                const { data, error } = await _supabase
-                    .from('slokas')
-                    .select('*')
-                    .limit(1);
+    async function fetchSloka() {
+        try {
+            // 3. Fetch data
+            const { data, error } = await _supabase
+                .from('slokas')
+                .select('*')
+                .limit(1);
 
-                if (error) throw error;
+            if (error) throw error;
 
-                if (data && data[0]) {
-                    document.getElementById('slokaText').innerText = data[0].sloka_telugu;
-                    document.getElementById('slokaEnglish').innerText = data[0].meaning_english;
-                    document.getElementById('loadingOverlay').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('loadingOverlay').classList.add('hidden');
-                    }, 500);
-                }
-            } catch (err) {
-                console.error('Error:', err);
-                document.getElementById('slokaText').innerText = "Please refresh to try again.";
+            if (data && data.length > 0) {
+                // 4. Update UI
+                document.getElementById('slokaText').innerText = data[0].sloka_telugu;
+                document.getElementById('slokaEnglish').innerText = data[0].meaning_english;
+                
+                // 5. Success! Hide loading
+                const loader = document.getElementById('loadingOverlay');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.classList.add('hidden'), 500);
             }
+        } catch (err) {
+            console.error('Supabase Error:', err);
+            document.getElementById('slokaText').innerText = "Connection failed. Please check your Supabase Table name.";
         }
+    }
 
-        function openPractice() { document.getElementById('practiceModal').classList.remove('hidden'); }
-        function closePractice() { document.getElementById('practiceModal').classList.add('hidden'); }
+    function openPractice() { document.getElementById('practiceModal').classList.remove('hidden'); }
+    function closePractice() { document.getElementById('practiceModal').classList.add('hidden'); }
 
-        fetchSloka();
-    </script>
+    // Run immediately
+    fetchSloka();
+</script>
 </body>
 </html>
