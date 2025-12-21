@@ -3,101 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zengita | Sacred Learning</title>
+    <title>Zengita | Sacred Learning Flow</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root { --saffron: #FF9933; --maroon: #800507; --cream: #FFFBF2; }
-        body { background-color: var(--cream); font-family: 'Noto Sans Telugu', sans-serif; }
+        body { background-color: var(--cream); font-family: 'Noto Sans Telugu', sans-serif; transition: all 0.3s ease; }
         
-        /* Glassmorphism Card Style */
-        .glass-card { 
-            background: rgba(255, 255, 255, 0.95); 
-            backdrop-filter: blur(10px); 
-            border: 1px solid rgba(255, 153, 51, 0.2); 
-            box-shadow: 0 25px 50px -12px rgba(128, 5, 7, 0.1);
+        /* Temple Arch Header */
+        .temple-arch {
+            background: var(--maroon);
+            border-radius: 0 0 100px 100px;
+            padding-bottom: 5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* Animated Waveform for Practice Mode */
-        .animate-wave { animation: wave 1.2s infinite ease-in-out; }
-        @keyframes wave { 
-            0%, 100% { height: 12px; transform: scaleY(1); } 
-            50% { height: 45px; transform: scaleY(1.5); } 
-        }
-
-        .btn-gradient {
-            background: linear-gradient(135deg, #FF9933 0%, #FFB366 100%);
+        /* Glass Cards */
+        .nav-card {
+            background: white;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 153, 51, 0.15);
+            box-shadow: 0 8px 20px rgba(128, 5, 7, 0.04);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 153, 51, 0.4); }
+        .nav-card:hover { transform: translateY(-5px); border-color: var(--saffron); }
+
+        /* Navigation Logic */
+        .page { display: none; min-height: 100vh; animation: pageIn 0.4s ease-out; }
+        .page.active { display: flex; flex-direction: column; }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn-saffron {
+            background: linear-gradient(135deg, #FF9933, #FFB366);
+            color: white;
+            box-shadow: 0 10px 20px rgba(255, 153, 51, 0.3);
+        }
+
+        /* Animated Waveform */
+        .wave-bar { animation: wave 1s infinite ease-in-out; }
+        @keyframes wave { 0%, 100% { height: 10px; } 50% { height: 40px; } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between py-12 px-6">
+<body>
 
-    <header class="text-center mb-8">
-        <h1 style="font-family: 'Playfair Display'; color: var(--maroon);" class="text-5xl font-extrabold tracking-tight">Zengita</h1>
-        <p class="text-orange-500 font-bold italic text-xl mt-3">ప్రతి శ్లోకం... ఒక జీవన పాఠం</p>
-    </header>
-
-    <main class="w-full max-w-lg glass-card rounded-[3.5rem] p-12 text-center relative">
-        <div class="mb-6">
-            <span class="text-xs tracking-[0.4em] font-black text-orange-500 uppercase">Gita 1.1</span>
+    <div id="home" class="page active">
+        <div class="temple-arch text-center pt-16 px-6">
+            <h1 style="font-family: 'Playfair Display';" class="text-white text-6xl font-black italic">Zengita</h1>
+            <p class="text-orange-300 font-bold mt-3 text-lg">ప్రతి శ్లోకం... ఒక జీవన పాఠం</p>
         </div>
 
-        <h2 class="text-3xl md:text-4xl leading-[1.6] text-gray-900 font-bold mb-10 px-2">
-            ధర్మక్షేత్రే కురుక్షేత్రే సమవేతా యుయుత్సవః |<br>
-            మామకాః పాణ్డవాశ్చైవ కిమకుర్వత సంజయ ||
-        </h2>
-
-        <div class="w-24 h-1 bg-orange-100 mx-auto mb-10 rounded-full opacity-50"></div>
-
-        <p class="italic text-gray-600 text-lg leading-relaxed mb-12 px-4">
-            "Dhritarashtra said: O Sanjaya, assembled in the holy field of Kurukshetra and eager to fight, what did my sons and the sons of Pandu do?"
-        </p>
-
-        <div class="space-y-5">
-            <button onclick="toggleModal(true)" class="w-full btn-gradient text-white py-5 rounded-[2rem] font-bold text-xl shadow-lg flex items-center justify-center gap-3">
-                <span>🎙️</span> Practice Mode
-            </button>
-            <button class="text-maroon font-bold text-lg hover:underline transition-all block mx-auto">
-                Next Sloka →
-            </button>
-        </div>
-    </main>
-
-    <div id="practiceModal" class="fixed inset-0 bg-black/40 backdrop-blur-md hidden flex items-center justify-center p-6 z-50">
-        <div class="bg-white rounded-[3rem] w-full max-w-sm p-14 text-center shadow-2xl transform transition-all">
-            <h3 class="text-2xl font-bold text-[#800507] mb-2">Recite Now</h3>
-            <p class="text-gray-400 font-medium mb-10">Listen to your inner voice...</p>
-            
-            <div class="flex items-center justify-center gap-3 h-20 mb-12">
-                <div class="w-2.5 bg-orange-300 rounded-full animate-wave" style="animation-delay: 0.1s"></div>
-                <div class="w-2.5 bg-orange-500 rounded-full animate-wave" style="animation-delay: 0.3s"></div>
-                <div class="w-2.5 bg-maroon rounded-full animate-wave" style="animation-delay: 0.2s"></div>
-                <div class="w-2.5 bg-orange-500 rounded-full animate-wave" style="animation-delay: 0.4s"></div>
-                <div class="w-2.5 bg-orange-300 rounded-full animate-wave" style="animation-delay: 0.5s"></div>
+        <div class="px-6 -mt-12 w-full max-w-md mx-auto">
+            <div class="grid grid-cols-2 gap-4">
+                <div onclick="showPage('discovery')" class="nav-card p-6 text-center cursor-pointer">
+                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">📖</div>
+                    <p class="font-bold text-maroon text-sm uppercase tracking-tight">Daily Sloka</p>
+                </div>
+                <div onclick="showPage('languages')" class="nav-card p-6 text-center cursor-pointer">
+                    <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">🌐</div>
+                    <p class="font-bold text-maroon text-sm uppercase tracking-tight">Languages</p>
+                </div>
+                <div class="nav-card p-6 text-center opacity-40 grayscale">
+                    <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">📊</div>
+                    <p class="font-bold text-gray-600 text-sm uppercase tracking-tight">Progress</p>
+                </div>
+                <div class="nav-card p-6 text-center opacity-40 grayscale">
+                    <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">⚙️</div>
+                    <p class="font-bold text-gray-600 text-sm uppercase tracking-tight">Settings</p>
+                </div>
             </div>
-
-            <button onclick="toggleModal(false)" class="w-full bg-[#800507] text-white py-5 rounded-[1.5rem] font-bold text-lg shadow-xl hover:bg-red-900 transition-colors">
-                Finish
-            </button>
+            
+            <div class="nav-card mt-6 p-6 flex items-center justify-between">
+                <div>
+                    <h4 class="font-bold text-maroon text-lg">Daily Streak</h4>
+                    <p class="text-gray-500 text-sm">4 days consistent</p>
+                </div>
+                <div class="text-3xl">🔥</div>
+            </div>
         </div>
     </div>
 
-    <footer class="mt-10 opacity-30">
-        <p class="text-gray-900 text-xs tracking-[0.5em] font-bold uppercase">Learning the Eternal Way</p>
-    </footer>
+    <div id="languages" class="page items-center pt-12 px-6">
+        <div class="w-full max-w-md">
+            <button onclick="showPage('home')" class="text-maroon font-black text-xl mb-8 flex items-center gap-2">
+                <span>←</span> Dashboard
+            </button>
+            <h2 class="text-3xl font-extrabold text-maroon mb-2">Preferred Script</h2>
+            <p class="text-gray-500 mb-8 font-medium">Select the language for sloka recitation.</p>
+            
+            <div class="space-y-4">
+                <div class="nav-card p-6 flex items-center justify-between border-2 border-orange-500">
+                    <span class="font-bold text-lg">Telugu (తెలుగు)</span>
+                    <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs">✓</div>
+                </div>
+                <div class="nav-card p-6 flex items-center justify-between opacity-70">
+                    <span class="font-bold text-lg">Sanskrit (సంస్కృతం)</span>
+                </div>
+                <div class="nav-card p-6 flex items-center justify-between opacity-70">
+                    <span class="font-bold text-lg">English (Meaning Only)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="discovery" class="page items-center pt-12 px-6">
+        <div class="w-full max-w-lg">
+            <button onclick="showPage('home')" class="text-maroon font-black text-xl mb-6">← Home</button>
+            
+            <div class="bg-white rounded-[3.5rem] p-12 text-center shadow-2xl relative border border-orange-50/50">
+                <span class="text-orange-500 font-black tracking-[0.4em] text-xs uppercase mb-8 block">GITA 1.1</span>
+                
+                <h3 class="text-3xl md:text-4xl font-bold leading-relaxed mb-10 text-gray-900">
+                    ధర్మక్షేత్రే కురుక్షేత్రే సమవేతా యుయుత్సవః |<br>
+                    మామకాః పాణ్డవాశ్చైవ కిమకుర్వత సంజయ ||
+                </h3>
+
+                <div class="w-16 h-1 bg-orange-100 mx-auto mb-10 rounded-full"></div>
+
+                <p class="italic text-gray-600 text-lg leading-relaxed mb-12">
+                    "Dhritarashtra said: O Sanjaya, assembled in the holy field of Kurukshetra and eager to fight, what did my sons and the sons of Pandu do?"
+                </p>
+
+                <div class="space-y-4">
+                    <button onclick="togglePractice(true)" class="w-full btn-saffron py-5 rounded-[2rem] font-bold text-xl flex items-center justify-center gap-3">
+                        <span>🎙️</span> Practice Chanting
+                    </button>
+                    <p class="text-maroon font-bold text-sm cursor-pointer hover:underline py-2">Skip to Next Sloka →</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="practiceModal" class="fixed inset-0 bg-black/50 backdrop-blur-md hidden items-center justify-center p-6 z-50">
+        <div class="bg-white rounded-[3rem] w-full max-w-sm p-14 text-center shadow-2xl">
+            <h3 class="text-2xl font-bold text-maroon mb-2">Recite Now</h3>
+            <p class="text-gray-400 mb-10">Listen to your inner voice...</p>
+            
+            <div class="flex items-center justify-center gap-2 h-16 mb-12">
+                <div class="w-2 bg-orange-200 rounded-full wave-bar" style="animation-delay: 0.1s"></div>
+                <div class="w-2 bg-orange-400 rounded-full wave-bar" style="animation-delay: 0.2s"></div>
+                <div class="w-2 bg-maroon rounded-full wave-bar" style="animation-delay: 0.3s"></div>
+                <div class="w-2 bg-orange-400 rounded-full wave-bar" style="animation-delay: 0.4s"></div>
+                <div class="w-2 bg-orange-200 rounded-full wave-bar" style="animation-delay: 0.5s"></div>
+            </div>
+
+            <button onclick="togglePractice(false)" class="w-full bg-maroon text-white py-5 rounded-2xl font-bold text-lg">Finish Practice</button>
+        </div>
+    </div>
 
     <script>
-        function toggleModal(show) {
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function togglePractice(show) {
             const modal = document.getElementById('practiceModal');
-            if (show) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-            } else {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
+            modal.style.display = show ? 'flex' : 'none';
         }
     </script>
 </body>
