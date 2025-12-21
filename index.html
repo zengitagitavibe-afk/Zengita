@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zengita | Sacred UI</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;700&family=Playfair+Display:ital,wght@0,900;1,700&display=swap" rel="stylesheet">
+
     <style>
         :root { --maroon: #5D0E11; --gold: #D4AF37; --saffron: #FF9933; --cream: #FDF5E6; }
         
@@ -13,30 +18,30 @@
             background-color: var(--maroon); 
             background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
             font-family: 'Noto Sans Telugu', sans-serif;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0;
+            margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
 
-        /* FIGMA MATCH: The Ornate Temple Arch */
-        .sacred-container {
+        /* FIGMA MATCH: The Sacred Archway */
+        .sacred-arch {
             background: var(--cream);
             color: var(--maroon);
             width: 100%; max-width: 400px;
-            min-height: 600px;
+            min-height: 620px;
             border: 4px solid var(--gold);
-            border-radius: 160px 160px 40px 40px; /* Precise Arch Shape */
+            border-radius: 160px 160px 40px 40px;
             position: relative;
-            padding: 80px 30px 40px;
+            padding: 90px 30px 40px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.6);
             overflow: hidden;
         }
 
-        /* Secondary Inner Decorative Border */
-        .sacred-container::after {
+        /* Inner decorative gold line */
+        .sacred-arch::after {
             content: ""; position: absolute;
             top: 10px; left: 10px; right: 10px; bottom: 10px;
             border: 1.5px solid var(--gold);
             border-radius: 150px 150px 32px 32px;
-            pointer-events: none; opacity: 0.6;
+            pointer-events: none; opacity: 0.5;
         }
 
         /* FIGMA MATCH: Beveled Cream Buttons */
@@ -46,7 +51,7 @@
             color: var(--maroon);
             border-radius: 50px;
             font-weight: 900;
-            padding: 18px;
+            padding: 16px;
             box-shadow: 0 5px 0 var(--gold);
             transition: 0.1s;
             text-transform: uppercase;
@@ -56,87 +61,91 @@
         }
         .btn-sacred:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--gold); }
 
-        .page { display: none; flex-direction: column; align-items: center; text-align: center; width: 100%; }
-        .page.active { display: flex; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         .input-sacred {
             width: 100%; background: white; border: 2px solid var(--gold);
-            border-radius: 15px; padding: 12px; margin-bottom: 12px; color: var(--maroon);
+            border-radius: 15px; padding: 12px; margin-bottom: 12px; color: var(--maroon); outline: none;
         }
     </style>
 </head>
 <body>
+    <div id="root"></div>
 
-    <div class="sacred-container">
-        <div class="absolute top-12 left-0 right-0 text-center">
-            <h1 style="font-family: 'Playfair Display';" class="text-3xl italic font-black text-maroon">Zengita</h1>
-        </div>
+    <script type="text/babel">
+        const { useState } = React;
 
-        <div id="home" class="page active mt-10">
-            <h2 class="text-gold font-black tracking-widest text-[10px] mb-8 uppercase">Student Dashboard</h2>
-            
-            <div class="space-y-4 w-full px-4">
-                <button onclick="showPage('discovery')" class="btn-sacred">📖 Daily Sloka</button>
-                <button onclick="showPage('admin')" class="btn-sacred">⚙️ Admin Access</button>
-            </div>
+        function ZengitaApp() {
+            const [view, setView] = useState('dashboard');
+            const [slokaData, setSlokaData] = useState({
+                title: "GITA 1.1",
+                telugu: "ధర్మక్షేత్రే కురుక్షేత్రే సమవేతా యుయుత్సవః | మామకాః పాణ్డవాశ్చైవ కిమకుర్వత సంజయ ||",
+                english: "Dhritarashtra said: O Sanjaya, assembled in the holy field of Kurukshetra..."
+            });
 
-            <div class="mt-12 w-full px-4">
-                <div class="bg-white/50 border border-gold/30 rounded-3xl p-6 flex justify-between items-center">
-                    <div class="text-left">
-                        <p class="text-[9px] font-black text-gold uppercase tracking-widest">Your Progress</p>
-                        <p class="font-bold text-lg">4 Day Streak</p>
+            const handleSave = () => {
+                const t = document.getElementById('inTitle').value;
+                const tel = document.getElementById('inTelugu').value;
+                const eng = document.getElementById('inEnglish').value;
+                if(t && tel) {
+                    setSlokaData({ title: t, telugu: tel, english: eng });
+                    alert("Folder structure updated with new Sloka!");
+                    setView('discovery');
+                }
+            };
+
+            return (
+                <div className="sacred-arch">
+                    {/* Header Logo */}
+                    <div className="absolute top-12 left-0 right-0 text-center">
+                        <h1 style={{fontFamily: 'Playfair Display'}} className="text-3xl italic font-black text-maroon">Zengita</h1>
                     </div>
-                    <span class="text-3xl">🔥</span>
+
+                    {/* Dashboard Screen */}
+                    {view === 'dashboard' && (
+                        <div className="mt-12 space-y-6">
+                            <h2 className="text-gold font-black tracking-widest text-[10px] text-center uppercase">Student Dashboard</h2>
+                            <div className="space-y-4">
+                                <button onClick={() => setView('discovery')} className="btn-sacred">📖 Daily Sloka</button>
+                                <button onClick={() => setView('admin')} className="btn-sacred">⚙️ Admin Control</button>
+                            </div>
+                            <div className="bg-white/50 border border-gold/30 rounded-3xl p-6 flex justify-between items-center mt-10">
+                                <div className="text-left">
+                                    <p className="text-[9px] font-black text-gold uppercase tracking-widest">Growth</p>
+                                    <p className="font-bold text-lg">4 Day Streak</p>
+                                </div>
+                                <span className="text-3xl">🔥</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Admin Screen */}
+                    {view === 'admin' && (
+                        <div className="mt-10">
+                            <button onClick={() => setView('dashboard')} className="text-[10px] font-black mb-6">← BACK</button>
+                            <h2 className="text-xl font-black mb-6 text-center">Add Sacred Content</h2>
+                            <input id="inTitle" placeholder="Chapter (e.g. 1.1)" className="input-sacred" />
+                            <textarea id="inTelugu" rows="3" placeholder="Telugu Script..." className="input-sacred"></textarea>
+                            <textarea id="inEnglish" rows="3" placeholder="English Meaning..." className="input-sacred"></textarea>
+                            <button onClick={handleSave} className="btn-sacred !bg-[#5D0E11] !text-white !border-gold">Save to Folders</button>
+                        </div>
+                    )}
+
+                    {/* Discovery Screen */}
+                    {view === 'discovery' && (
+                        <div className="mt-6 text-center">
+                            <p className="text-gold font-black tracking-widest text-[10px] mb-8 uppercase">{slokaData.title}</p>
+                            <h3 className="text-xl font-bold leading-relaxed mb-8 px-2 text-gray-900">{slokaData.telugu}</h3>
+                            <div className="w-12 h-0.5 bg-gold/20 mx-auto mb-8"></div>
+                            <p className="italic text-gray-600 text-sm leading-relaxed mb-10 px-4">{slokaData.english}</p>
+                            <button className="btn-sacred !bg-[#5D0E11] !text-white mb-4">Practice Mode</button>
+                            <button onClick={() => setView('dashboard')} className="text-[9px] font-black text-gold uppercase tracking-[0.2em]">Return to Menu</button>
+                        </div>
+                    )}
                 </div>
-            </div>
-        </div>
-
-        <div id="admin" class="page mt-10">
-            <button onclick="showPage('home')" class="text-[10px] font-black mb-6">← BACK</button>
-            <h2 class="text-xl font-black mb-6">Add Sloka</h2>
-            <div class="w-full px-2">
-                <input id="inTitle" type="text" placeholder="Chapter (e.g. 1.1)" class="input-sacred">
-                <textarea id="inTelugu" rows="3" placeholder="Telugu Script..." class="input-sacred"></textarea>
-                <textarea id="inEnglish" rows="3" placeholder="English Meaning..." class="input-sacred"></textarea>
-                <button onclick="saveSloka()" class="btn-sacred !bg-maroon !text-white !border-gold mt-4">Save to View</button>
-            </div>
-        </div>
-
-        <div id="discovery" class="page mt-4">
-            <p id="outTitle" class="text-gold font-black tracking-widest text-[10px] mb-8 uppercase">GITA 1.1</p>
-            <h3 id="outTelugu" class="text-xl font-bold leading-relaxed mb-8 px-2">
-                ధర్మక్షేత్రే కురుక్షేత్రే సమవేతా యుయుత్సవః |<br>
-                మామకాః పాణ్డవాశ్చైవ కిమకుర్వత సంజయ ||
-            </h3>
-            <div class="w-12 h-0.5 bg-gold/20 mb-8"></div>
-            <p id="outEnglish" class="italic text-gray-600 text-sm leading-relaxed mb-10 px-4">
-                "Dhritarashtra said: O Sanjaya, assembled in the holy field of Kurukshetra..."
-            </p>
-            <button class="btn-sacred !bg-maroon !text-white mb-4">Practice Mode</button>
-            <button onclick="showPage('home')" class="text-[9px] font-black text-gold uppercase tracking-[0.2em]">Exit Menu</button>
-        </div>
-    </div>
-
-    <script>
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            );
         }
 
-        function saveSloka() {
-            const t = document.getElementById('inTitle').value;
-            const tel = document.getElementById('inTelugu').value;
-            const eng = document.getElementById('inEnglish').value;
-
-            if(t && tel) {
-                document.getElementById('outTitle').innerText = t;
-                document.getElementById('outTelugu').innerText = tel;
-                document.getElementById('outEnglish').innerText = eng;
-                alert("Updated Successfully!");
-                showPage('discovery');
-            }
-        }
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ZengitaApp />);
     </script>
 </body>
 </html>
