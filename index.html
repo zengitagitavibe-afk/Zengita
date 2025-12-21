@@ -38,7 +38,7 @@
         </div>
     </main>
 
-    <script>
+<script>
     const supabaseUrl = 'https://ghiwspqrzeofigacysytr.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdoaXdzcHFyemVvZmlnYWNzeXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwOTAwOTQsImV4cCI6MjA4MTY2NjA5NH0.QW9TbObN5LAiz7fofKFwHPwziIdwy57mJ4ww6Vr2jk4';
     
@@ -46,8 +46,7 @@
 
     async function fetchSloka() {
         try {
-            // Trying to find your table. Change 'slokas' below if your table 
-            // has a different name (like 'verses' or 'Gita')
+            // Looking in your 'slokas' table
             const { data, error } = await _supabase
                 .from('slokas') 
                 .select('*')
@@ -56,15 +55,18 @@
             if (error) throw error;
 
             if (data && data[0]) {
-                document.getElementById('slokaText').innerText = data[0].sloka_telugu;
+                // Updated to match your actual column name: 'telugu_text'
+                document.getElementById('slokaText').innerText = data[0].telugu_text;
                 document.getElementById('slokaEnglish').innerText = data[0].meaning_english;
+                
+                // Success! Hide the loading screen
                 document.getElementById('loadingOverlay').classList.add('hidden');
             } else {
-                document.getElementById('statusText').innerText = "Table found, but it is empty! Please add a row in Supabase.";
+                document.getElementById('statusText').innerText = "Table is empty. Add a row in Supabase!";
             }
         } catch (err) {
-            console.error('Error:', err);
-            document.getElementById('statusText').innerText = "Table 'slokas' not found. Please rename your table in Supabase to 'slokas'.";
+            console.error('Connection Error:', err);
+            document.getElementById('statusText').innerText = "Technical Error. Check console for details.";
         }
     }
     fetchSloka();
